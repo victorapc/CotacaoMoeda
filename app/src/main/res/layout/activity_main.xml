@@ -19,13 +19,26 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cotação Moeda"
+            android:text="@string/cotacao_moeda"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="24sp"
         />
     </androidx.appcompat.widget.Toolbar>
+
+    <ProgressBar
+        android:id="@+id/recyler_ProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@+id/mcv_card_conta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+    />
 
     <ImageView
         android:id="@+id/imageView"
@@ -41,8 +54,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcv_card_conta"
         android:layout_width="0dp"
-        android:layout_height="320dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:cardElevation="15dp"
@@ -167,7 +180,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="@string/maior_baixa"
+                android:text="@string/minima_dia"
                 app:layout_constraintStart_toStartOf="@+id/compra_txt"
                 app:layout_constraintEnd_toEndOf="@+id/compra_txt"
                 app:layout_constraintTop_toBottomOf="@+id/compra_vlr_txt"
@@ -208,7 +221,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="@string/maior_alta"
+                android:text="@string/maxima_dia"
                 app:layout_constraintStart_toStartOf="@+id/venda_txt"
                 app:layout_constraintEnd_toEndOf="@+id/venda_txt"
                 app:layout_constraintTop_toTopOf="@+id/baixa_txt"
@@ -241,14 +254,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/valor_textInputLayout"
-                android:layout_width="160dp"
+                android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="@string/valor"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/ic_dinheiro"
-                app:layout_constraintStart_toStartOf="@+id/v_divider_bottom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/v_divider_bottom">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -261,6 +275,28 @@
                 />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/remover_btn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_remover"
+                android:layout_marginRight="10dp"
+                app:layout_constraintTop_toTopOf="@+id/valor_textInputLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/valor_textInputLayout"
+                app:layout_constraintEnd_toStartOf="@+id/valor_textInputLayout"
+            />
+
+            <ImageView
+                android:id="@+id/adicionar_btn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_adicionar"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintTop_toTopOf="@+id/valor_textInputLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/valor_textInputLayout"
+                app:layout_constraintStart_toEndOf="@+id/valor_textInputLayout"
+            />
+
             <TextView
                 android:id="@+id/valor_resultado_txt"
                 android:layout_width="wrap_content"
@@ -269,10 +305,10 @@
                 android:text="@string/valor_zerado"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@+id/valor_textInputLayout"
-                app:layout_constraintBottom_toBottomOf="@+id/valor_textInputLayout"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/valor_textInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/valor_textInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
             />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

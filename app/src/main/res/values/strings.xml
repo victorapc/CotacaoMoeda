@@ -7,4 +7,9 @@
     <string name="maior_alta">Maior Alta</string>
     <string name="valor_zerado">R$ 0.00</string>
     <string name="valor">Valor</string>
+    <string name="moeda">Moeda</string>
+    <string name="atualizar">Atualizar</string>
+
+    <string name="erro_404">Moeda não encontrada.</string>
+    <string name="erro_geral">Falha ao conectar no servidor.</string>
 </resources>

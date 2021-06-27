@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -87,12 +89,30 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
+        // Deixando inativo o campo de digitar valor até selecionar uma moeda
+        binding.valorEdt.isEnabled = false
+
         binding.moedasAu.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 moeda = lista[position]
 
                 carregarDadosMoeda()
             }
+
+        binding.valorEdt.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                calcular()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
     }
 
     override fun onResume() {
@@ -133,11 +153,13 @@ class MainActivity : AppCompatActivity() {
                             binding.baixaVlrTxt.text = "R$ ${globais.formataValor(moeda.low)}"
 
                             binding.valorEdt.setText("1")
+                            binding.valorEdt.isEnabled = true
 
                             binding.recylerProgressBar.visibility = View.GONE
                         }
                     }else{
                         binding.recylerProgressBar.visibility = View.GONE
+                        binding.valorEdt.isEnabled = false
 
                         when(response.code()){
                             404 -> Toast.makeText(this@MainActivity, getString(R.string.erro_404), Toast.LENGTH_LONG).show()
@@ -149,6 +171,7 @@ class MainActivity : AppCompatActivity() {
                 })
             }catch (e: Exception){
                 binding.recylerProgressBar.visibility = View.GONE
+                binding.valorEdt.isEnabled = false
 
                 Toast.makeText(this@MainActivity, getString(R.string.erro_geral), Toast.LENGTH_LONG).show()
             }
@@ -157,10 +180,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun calcular(){
         var valorDigitado = 0.0
+        var totalValorMoeda = 0.0
 
-        if(binding.valorEdt.text?.isEmpty() == true){
+        if(binding.valorEdt.text?.isEmpty() == true
+            || binding.valorEdt.text?.toString().equals("")
+            || binding.valorEdt.text?.toString().equals(".")){
             valorDigitado = 1.0
+        } else {
+            valorDigitado = binding.valorEdt.text.toString().replace(",", ".").toDouble()
         }
+
+        totalValorMoeda = valorMoeda * valorDigitado
+
+        binding.valorResultadoTxt.text = "R$ ${globais.formataValor(totalValorMoeda)}"
     }
 
     private fun carregarSpinner(){

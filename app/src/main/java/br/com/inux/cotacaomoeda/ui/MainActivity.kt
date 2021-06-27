@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         // Deixando inativo o campo de digitar valor até selecionar uma moeda
-        binding.valorEdt.isEnabled = false
+        habilitarDesabilitarCampos(false)
 
         binding.moedasAu.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -113,12 +113,26 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+        binding.adicionarBtn.setOnClickListener {
+
+        }
+
+        binding.removerBtn.setOnClickListener {
+
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         carregarSpinner()
+    }
+
+    private fun habilitarDesabilitarCampos(tipo: Boolean){
+        binding.valorEdt.isEnabled = tipo
+        binding.adicionarBtn.isEnabled = tipo
+        binding.removerBtn.isEnabled = tipo
     }
 
     private fun carregarDadosMoeda(){
@@ -153,13 +167,13 @@ class MainActivity : AppCompatActivity() {
                             binding.baixaVlrTxt.text = "R$ ${globais.formataValor(moeda.low)}"
 
                             binding.valorEdt.setText("1")
-                            binding.valorEdt.isEnabled = true
+                            habilitarDesabilitarCampos(true)
 
                             binding.recylerProgressBar.visibility = View.GONE
                         }
                     }else{
                         binding.recylerProgressBar.visibility = View.GONE
-                        binding.valorEdt.isEnabled = false
+                        habilitarDesabilitarCampos(false)
 
                         when(response.code()){
                             404 -> Toast.makeText(this@MainActivity, getString(R.string.erro_404), Toast.LENGTH_LONG).show()
@@ -171,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                 })
             }catch (e: Exception){
                 binding.recylerProgressBar.visibility = View.GONE
-                binding.valorEdt.isEnabled = false
+                habilitarDesabilitarCampos(false)
 
                 Toast.makeText(this@MainActivity, getString(R.string.erro_geral), Toast.LENGTH_LONG).show()
             }
@@ -179,18 +193,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calcular(){
-        var valorDigitado = 0.0
-        var totalValorMoeda = 0.0
+        var valorDigitado: Double
 
-        if(binding.valorEdt.text?.isEmpty() == true
+        valorDigitado = if(binding.valorEdt.text?.isEmpty() == true
             || binding.valorEdt.text?.toString().equals("")
             || binding.valorEdt.text?.toString().equals(".")){
-            valorDigitado = 1.0
+            1.0
         } else {
-            valorDigitado = binding.valorEdt.text.toString().replace(",", ".").toDouble()
+            binding.valorEdt.text.toString().replace(",", ".").toDouble()
         }
 
-        totalValorMoeda = valorMoeda * valorDigitado
+        var totalValorMoeda: Double = valorMoeda * valorDigitado
 
         binding.valorResultadoTxt.text = "R$ ${globais.formataValor(totalValorMoeda)}"
     }

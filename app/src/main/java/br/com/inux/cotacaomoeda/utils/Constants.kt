@@ -4,6 +4,9 @@ class Constants {
     companion object{
         const val BASE_URL = "https://economia.awesomeapi.com.br/"
 
+        const val ID_BANNER_PUBLICIDADE = "ca-app-pub-0170232689257548/5173564076"
+        const val ID_BANNER_PUBLICIDADE_TESTE = "ca-app-pub-3940256099942544/6300978111"
+
         const val USD_BRL = "USD-BRL"   // Dólar Americano/Real Brasileiro
         const val USD_BRLT = "USD-BRLT" // Dólar Americano/Real Brasileiro Turismo
         const val CAD_BRL = "CAD-BRL"   // Dólar Canadense/Real Brasileiro

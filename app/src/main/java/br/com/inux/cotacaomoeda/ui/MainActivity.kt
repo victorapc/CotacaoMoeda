@@ -58,6 +58,8 @@ import br.com.inux.cotacaomoeda.utils.Constants.Companion.UYU_BRL
 import br.com.inux.cotacaomoeda.utils.Constants.Companion.XRP_BRL
 import br.com.inux.cotacaomoeda.utils.Constants.Companion.ZAR_BRL
 import br.com.inux.cotacaomoeda.utils.MetodosGlobais
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.inux.retrofitapp.viewmodel.MainViewModel
 import com.inux.retrofitapp.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -115,12 +117,16 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.adicionarBtn.setOnClickListener {
-
+            calcularBotoes(true)
         }
 
         binding.removerBtn.setOnClickListener {
-
+            calcularBotoes(false)
         }
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.publicidade.loadAd(adRequest)
     }
 
     override fun onResume() {
@@ -160,13 +166,13 @@ class MainActivity : AppCompatActivity() {
                         response.body()?.let { moedas ->
                             val moeda = moedas[0]
 
-                            valorMoeda = moeda.bid
+                            valorMoeda = globais.formataValor(moeda.bid).toDouble()
                             binding.compraVlrTxt.text = "R$ ${globais.formataValor(valorMoeda)}"
                             binding.vendaVlrTxt.text = "R$ ${globais.formataValor(moeda.ask)}"
                             binding.altaVlrTxt.text = "R$ ${globais.formataValor(moeda.high)}"
                             binding.baixaVlrTxt.text = "R$ ${globais.formataValor(moeda.low)}"
 
-                            binding.valorEdt.setText("1")
+                            binding.valorEdt.setText("1.00")
                             habilitarDesabilitarCampos(true)
 
                             binding.recylerProgressBar.visibility = View.GONE
@@ -206,6 +212,30 @@ class MainActivity : AppCompatActivity() {
         var totalValorMoeda: Double = valorMoeda * valorDigitado
 
         binding.valorResultadoTxt.text = "R$ ${globais.formataValor(totalValorMoeda)}"
+    }
+
+    private fun calcularBotoes(somar: Boolean){
+        var valorDigitado: Double
+
+        valorDigitado = if(binding.valorEdt.text?.isEmpty() == true
+            || binding.valorEdt.text?.toString().equals("")
+            || binding.valorEdt.text?.toString().equals(".")){
+            1.0
+        } else {
+            binding.valorEdt.text.toString().replace(",", ".").toDouble()
+        }
+
+        if(somar){
+            valorDigitado = valorDigitado + 1
+        }else{
+            valorDigitado = valorDigitado - 1
+
+            if(valorDigitado <= 0){
+                valorDigitado = 1.0
+            }
+        }
+
+        binding.valorEdt.setText(globais.formataValor(valorDigitado))
     }
 
     private fun carregarSpinner(){

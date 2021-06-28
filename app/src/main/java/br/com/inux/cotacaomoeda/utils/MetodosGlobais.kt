@@ -45,7 +45,7 @@ class MetodosGlobais(ctx: Context?) {
 
         df = DecimalFormat("#,##0.00")
 
-        return df.format(vlr)
+        return df.format(vlr).replace(",", ".")
     }
 
     fun formataValor(valor: Double, tipo: Int) : String {

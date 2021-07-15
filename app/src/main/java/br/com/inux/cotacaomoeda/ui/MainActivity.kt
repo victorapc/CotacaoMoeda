@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private var valorMoeda: Double = 0.0
+    private var posicao: Int = -1
     val lista: ArrayList<Moedas> by lazy {
         ArrayList()
     }
@@ -96,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.moedasAu.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
+                posicao = position
                 moeda = lista[position]
 
                 carregarDadosMoeda()
@@ -124,9 +126,11 @@ class MainActivity : AppCompatActivity() {
             calcularBotoes(false)
         }
 
-        MobileAds.initialize(this) {}
+        posicao = -1;
+
+        /*MobileAds.initialize(this) {}
         val adRequest = AdRequest.Builder().build()
-        binding.publicidade.loadAd(adRequest)
+        binding.publicidade.loadAd(adRequest)*/
     }
 
     override fun onResume() {
@@ -291,7 +295,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.menu_update  ->
-                carregarDadosMoeda()
+                if(posicao >= 0){
+                    carregarDadosMoeda()
+                } else {
+                    Toast.makeText(this,
+                        "Informe uma moeda para cotação.",
+                        Toast.LENGTH_LONG).show()
+                }
             else -> false
         }
         return super.onOptionsItemSelected(item)

@@ -128,9 +128,9 @@ class MainActivity : AppCompatActivity() {
 
         posicao = -1;
 
-        /*MobileAds.initialize(this) {}
+        MobileAds.initialize(this) {}
         val adRequest = AdRequest.Builder().build()
-        binding.publicidade.loadAd(adRequest)*/
+        binding.publicidade.loadAd(adRequest)
     }
 
     override fun onResume() {
